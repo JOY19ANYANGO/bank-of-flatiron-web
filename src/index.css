@@ -1,3 +1,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.glowing-border {
+  border: 2px solid #32cd32;
+  animation: glow 2s infinite;
+}
+
+.delete-icon {
+  color: #32cd32;
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.delete-icon:hover {
+  color: #00ff00;
+  transform: scale(1.2);
+  animation: glow 1.5s infinite;
+}
+
+  
+

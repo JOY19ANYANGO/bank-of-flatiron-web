@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function NewTransaction({ addTransaction }) {
   const [date, setDate] = useState("");
@@ -25,13 +27,20 @@ function NewTransaction({ addTransaction }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    if (!date || !description || !category || !amount) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+
     const newTransaction = {
-      date: date,
-      description: description,
-      category: category,
+      date,
+      description,
+      category,
       amount: parseFloat(amount),
     };
     addTransaction(newTransaction);
+    toast.success("Transaction added successfully!");
     setDate("");
     setDescription("");
     setCategory("");
@@ -41,8 +50,8 @@ function NewTransaction({ addTransaction }) {
 
   return (
     <div className="max-w-md mx-auto bg-gray-800 p-6 rounded-md shadow-lg">
+      <ToastContainer />
       <div className="flex justify-between items-center mb-4">
-        
         <button
           className="bg-green-500 hover:bg-green-600 text-gray-800 px-4 py-2 rounded-md transition duration-300 ease-in-out"
           onClick={() => setShowForm(!showForm)}
@@ -113,4 +122,3 @@ function NewTransaction({ addTransaction }) {
 }
 
 export default NewTransaction;
-

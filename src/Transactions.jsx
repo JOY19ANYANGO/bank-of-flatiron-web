@@ -16,20 +16,27 @@ function Transactions() {
     "https://media.gettyimages.com/id/1215119911/photo/looking-directly-up-at-the-skyline-of-the-financial-district-in-central-london-stock-image.jpg?s=2048x2048&w=gi&k=20&c=CA1cgh-STqN3dMUGbGE2LJFLZHuN0cH6CLTgAT1adY8=",
   ];
 
-  // Fetch the transactions
   useEffect(() => {
-    fetch("http://localhost:4000/transactions")
+    fetch("https://api.jsonbin.io/v3/b/6687baabacd3cb34a8619cb2/latest", {
+      headers: {
+        "X-Master-Key": "YOUR_JSONBIN_API_KEY" // Replace with your actual API key
+      }
+    })
       .then((r) => r.json())
       .then((data) => {
         console.log("Fetched data:", data);
-        // Sort the fetched array alphabetically according to the category
-        data.sort((a, b) =>
+        // Access the transactions array and sort it
+        const transactions = data.record.transactions;
+        transactions.sort((a, b) =>
           a.category.toLowerCase().localeCompare(b.category.toLowerCase())
         );
-        setTransactions(data);
+        setTransactions(transactions);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
       });
   }, []);
-
+  
   // Add a new transaction
   const addTransaction = (newTransaction) => {
     setTransactions([...transactions, newTransaction]);
@@ -39,15 +46,17 @@ function Transactions() {
   const handleSearch = (description) => {
     if (description === "" || description === null) {
       // Display all the transactions
-      fetch("http://localhost:4000/transactions")
+      fetch("https://api.jsonbin.io/v3/b/6687baabacd3cb34a8619cb2/latest")
         .then((r) => r.json())
         .then((data) => {
           console.log("Fetched data:", data);
-          data.sort((a, b) =>
+          // Access the transactions array and sort it
+          const transactions = data.record.transactions;
+          transactions.sort((a, b) =>
             a.category.toLowerCase().localeCompare(b.category.toLowerCase())
           );
-          setTransactions(data);
-        });
+          setTransactions(transactions);
+        })
     } else {
       // Filter transactions based on the entered description
       const filtered = transactions.filter((transaction) =>
@@ -62,11 +71,15 @@ function Transactions() {
   };
 
   const handleDelete = (id) => {
-    // Filter out the transaction with the given id and update the transactions state
-    const updatedTransactions = transactions.filter(
-      (transaction) => transaction.id !== id
-    );
-    setTransactions(updatedTransactions);
+    // Confirm before deleting
+    const confirmDelete = window.confirm("Are you sure you want to delete this transaction?");
+    if (confirmDelete) {
+      // Filter out the transaction with the given id and update the transactions state
+      const updatedTransactions = transactions.filter(
+        (transaction) => transaction.id !== id
+      );
+      setTransactions(updatedTransactions);
+    }
   };
 
   // Sort transactions by date
@@ -131,10 +144,39 @@ function Transactions() {
         </p>
         <NewTransaction addTransaction={addTransaction} />
       </div>
-      
-      <Searchbar onSearch={handleSearch} />
+      <div className="dark:bg-black">
+        <Searchbar onSearch={handleSearch} />
+        <div className="flex flex-col items-center mt-4">
+          <div className="flex space-x-4 mb-4">
+            <button
+              className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600"
+              onClick={handleSortAscending}
+            >
+              Sort by Date (Ascending)
+            </button>
+            <button
+              className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600"
+              onClick={handleSortDescending}
+            >
+              Sort by Date (Descending)
+            </button>
+            <button
+              className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600"
+              onClick={handleSortDescription}
+            >
+              Sort by Description
+            </button>
+            <button
+              className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600"
+              onClick={handleSortCategory}
+            >
+              Sort by Category
+            </button>
+          </div>
+        </div>
+      </div>
       {transactions.length === 0 ? (
-        <p className="text-white">No transactions found</p>
+        <p className="bg-gray-800">No transactions found</p>
       ) : (
         <table className="min-w-full bg-gray-800 text-white glowing-border">
           <thead>
@@ -167,34 +209,6 @@ function Transactions() {
           </tbody>
         </table>
       )}
-      <div className="flex flex-col items-center mt-4">
-        <div className="flex space-x-4 mb-4">
-          <button
-            className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600"
-            onClick={handleSortAscending}
-          >
-            Sort by Date (Ascending)
-          </button>
-          <button
-            className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600"
-            onClick={handleSortDescending}
-          >
-            Sort by Date (Descending)
-          </button>
-          <button
-            className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600"
-            onClick={handleSortDescription}
-          >
-            Sort by Description
-          </button>
-          <button
-            className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600"
-            onClick={handleSortCategory}
-          >
-            Sort by Category
-          </button>
-        </div>
-      </div>
     </div>
   );
 }

@@ -1,9 +1,16 @@
-# React + Vite
+# Bank-of-flatiron
+This website is designed to enable users to manage transactions by either adding or removing transactions.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
+## Technologies Used
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-# bank-of-flatiron-web
+### Frontend
+
+![React.js](https://img.shields.io/badge/react-v18.2.0-blue)
+
+It contains a form which enables user to add  transactions
+
+<img src="flat.png" alt="landing page" title="landing page">
+
+It contains a table which displays the list of transactions.
+<img src="bank.png" alt="landing page" title="landing page">

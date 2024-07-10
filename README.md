@@ -14,3 +14,8 @@ It contains a form which enables user to add  transactions
 
 It contains a table which displays the list of transactions.
 <img src="bank.png" alt="landing page" title="landing page">
+
+## Authors & License
+
+Authored by :
+* [Joy Anyango](https://github.com/JOY19ANYANGO).
